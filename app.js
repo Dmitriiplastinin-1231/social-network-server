@@ -6,6 +6,7 @@ const logger = require('morgan');
 require('dotenv').config();
 
 const usersRouter = require('./routes/users');
+const profileRouter = require('./routes/profile');
 
 const app = express();
 
@@ -15,6 +16,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 app.use('/users', usersRouter);
+app.use('/profile', profileRouter);
 
 
 module.exports = app;

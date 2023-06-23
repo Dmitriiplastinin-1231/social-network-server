@@ -9,3 +9,26 @@ datasource db {
   provider = "sqlite"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  userId   String @id @default(uuid())
+  name     String
+  password String
+  age      Int?
+  photo    String?
+  bgPhoto  String?
+  status   String?
+  sex      String?
+  email    String @unique
+  vk       String?
+  github   String?
+  posts    Post[]
+}
+
+model Post {
+  id        String @id @default(uuid())
+  author    User @relation(fields: [authorId], references: [userId])
+  authorId  String
+  title     String
+  text      String
+}
