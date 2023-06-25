@@ -1,13 +1,13 @@
-## Чтобы запустить сервер напишите **npm run server** в консоль
+### Чтобы запустить сервер напишите **npm run server** в консоль.
 # To start the server write `npm run server` to the console.
 
-## Чтобы увидеть базу данных напишите **npx prisma studio** в консоль.
+### Чтобы увидеть базу данных напишите **npx prisma studio** в консоль.
 # To see the data base write `npx prisma studio` to the console.
 
-## документация.
+### документация.
 # Documentation.
 
-## Example. Пример.
+### Example. Пример.
 
 >**/...** --- First lvl of the pathName. Первый уровень пути к файлу.
 >>**GET | POST | PUT | DELETE** --- HTTP request type. Тип HTTP запроса
