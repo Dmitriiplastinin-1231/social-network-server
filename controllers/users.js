@@ -3,7 +3,7 @@ const { prisma } = require('../prisma/prisma-client');
 const jwt = require('jsonwebtoken');
 
 /**
- * @route GET users/
+ * @route DELETE users/
  * @desc Give all users
  * @access Publick
  */

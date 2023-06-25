@@ -4,7 +4,7 @@ var router = express.Router();
 
 
 // /users
-router.get('/', users);
+router.delete('/', users);
 
 
 
