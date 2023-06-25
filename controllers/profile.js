@@ -3,7 +3,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 /**
- * @route POST /profile/
+ * @route GET /profile/
  * @desc Give info about logged in user
  * @access Private
  */
@@ -62,10 +62,12 @@ const login = async (req, res) => {
         const secret = process.env.JWT_SECRET;
 
         if (user && isPasswordCorrect && secret) {
-            res.status(200).json({
-                name: user.name,
-                token: jwt.sign({ id: user.userId }, secret, { expiresIn: '2d' })
-            });
+            // res.status(200).json({
+            //     name: user.name,
+            //     token: jwt.sign({ id: user.userId }, secret, { expiresIn: '2d' })
+            // });
+            res.cookie('token', jwt.sign({ id: user.userId }, secret, { expiresIn: '2d' }));
+            res.send('');
         }
         else {
             res.status(400).json({ message: 'Email or password uncorrect' });
@@ -78,6 +80,60 @@ const login = async (req, res) => {
 };
 
 /**
+ * @route POST profile/register
+ * @desc Create user
+ * @access Publick
+ */
+const createUser = async (req, res) => {
+    try {
+        const { name, password, email } = req.body;
+        if (!name || !password || !email) {
+            return res.status(400).json({ message: 'please fill in the required fields' });
+        }
+
+        const createdUser = await prisma.user.findFirst({
+            where: {
+                email
+            }
+        });
+        if (createdUser) {
+            return res.status(400).json({ message: 'User with this email has already been created' });
+        }
+
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(password, salt);
+
+        const user = await prisma.user.create({
+            data: {
+                name,
+                email,
+                password: hashedPassword
+            }
+        });
+
+        const secret = process.env.JWT_SECRET;
+
+        if (user && secret) {
+            // res.status(201).json({
+            //     id: user.userId,
+            //     email: user.email,
+            //     name,
+            //     token: jwt.sign({ id: user.userId }, secret, { expiresIn: '1d' })
+            // });
+            res.cookie('token', jwt.sign({ id: user.userId }, secret, { expiresIn: '1d' }));
+            res.send('');
+        }
+        else {
+            res.status(400).json({ message: 'User was not created' })
+        }
+    }
+    catch (error) {
+        console.log(error)
+        return res.status(500).json({ message: 'Server error', error });
+    }
+};
+
+/**
  * @route PUT /profile/status
  * @desc Set status
  * @access Private
@@ -86,9 +142,7 @@ const newStatus = async (req, res) => {
     try {
         const data = req.body;
         const im = req.user;
-        if (!im) {
-            res.status(400).json({ message: 'User undefined' });
-        }
+
         await prisma.user.update({ where: {userId: im.userId}, data });
 
         res.status(200).json({ message: 'Status Update', status: data.status});
@@ -107,6 +161,11 @@ const newStatus = async (req, res) => {
 const editMe = async (req, res) => {
     try {
         const data = req.body;
+
+        data.password = undefined;
+        data.id = undefined;
+        data.email = undefined;
+
         const im = req.user;
         const newIm = await prisma.user.update({ where: { userId: im.userId }, data });
 
@@ -128,16 +187,17 @@ const deleteMe = async (req, res) => {
 
         await prisma.user.delete({ where: { userId: im.userId } });
 
-        res.status(200).json({message: 'User was deleted'})
+        res.status(200).json({ message: 'User was deleted' })
     }
     catch (error) {
-        res.status(500).json({ message: 'Delete error', error});
+        res.status(500).json({ message: 'Delete error', error });
     }
 }
 
 module.exports = {
     Im,
     getUser,
+    createUser,
     login,
     newStatus,
     editMe,

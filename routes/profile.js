@@ -1,10 +1,10 @@
 var express = require('express');
 var router = express.Router();
-const { Im, getUser, login, newStatus, editMe, deleteMe } = require('../controllers/profile');
+const { Im, getUser, login, newStatus, editMe, deleteMe, createUser } = require('../controllers/profile');
 const { auth } = require('../middleware/auth');
 
 // /profile/
-router.post('/', auth, Im);
+router.get('/', auth, Im);
 // /profile/login
 router.post('/login', login);
 // /profile/:id
@@ -15,5 +15,7 @@ router.put('/status', auth, newStatus);
 router.put('/edit', auth, editMe);
 // /profile/delete
 router.delete('/delete', auth, deleteMe)
+// /users/register
+router.post('/register', createUser)
 
 module.exports = router;
