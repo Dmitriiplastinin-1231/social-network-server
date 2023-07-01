@@ -12,7 +12,7 @@ const Im = async (req, res) => {
         res.status(200).json(req.user);
     }
     catch (error) {
-        res.status(500).json({ message: 'Error sendind data', error });
+        res.status(200).json({ message: 'Error sendind data', error });
     }
 };
 
@@ -31,14 +31,14 @@ const getUser = async (req, res) => {
             }
         });
         if (!user) {
-            return res.status(400).json({ message: 'There is no such user' });
+            return res.status(200).json({ message: 'There is no such user' });
         }
 
         user.password = undefined;
         res.status(200).json(user);
     }
     catch (error) {
-        res.status(500).json({ message: 'Failed to get the user', error });
+        res.status(200).json({ message: 'Failed to get the user', error });
     }
 };
 
@@ -50,7 +50,7 @@ const getUser = async (req, res) => {
 const login = async (req, res) => {
     try {
         const { email, password } = req.body;
-
+        console.log(email, password)
         const user = await prisma.user.findFirst({
             where: {
                 email
@@ -70,12 +70,12 @@ const login = async (req, res) => {
             res.send('');
         }
         else {
-            res.status(400).json({ message: 'Email or password uncorrect' });
+            res.status(200).json({ message: 'Email or password uncorrect' });
         }
 
     }
     catch (error) {
-        res.status(500).json({ message: 'Login fail', error })
+        res.status(200).json({ message: 'Login fail', error })
     }
 };
 
@@ -88,7 +88,7 @@ const createUser = async (req, res) => {
     try {
         const { name, password, email } = req.body;
         if (!name || !password || !email) {
-            return res.status(400).json({ message: 'please fill in the required fields' });
+            return res.status(200).json({ message: 'please fill in the required fields' });
         }
 
         const createdUser = await prisma.user.findFirst({
@@ -97,7 +97,7 @@ const createUser = async (req, res) => {
             }
         });
         if (createdUser) {
-            return res.status(400).json({ message: 'User with this email has already been created' });
+            return res.status(200).json({ message: 'User with this email has already been created' });
         }
 
         const salt = await bcrypt.genSalt(10);
@@ -124,12 +124,12 @@ const createUser = async (req, res) => {
             res.send('');
         }
         else {
-            res.status(400).json({ message: 'User was not created' })
+            res.status(200).json({ message: 'User was not created' })
         }
     }
     catch (error) {
         console.log(error)
-        return res.status(500).json({ message: 'Server error', error });
+        return res.status(200).json({ message: 'Server error', error });
     }
 };
 
@@ -142,13 +142,14 @@ const newStatus = async (req, res) => {
     try {
         const data = req.body;
         const im = req.user;
+        console.log(data)
 
         await prisma.user.update({ where: {userId: im.userId}, data });
 
-        res.status(200).json({ message: 'Status Update', status: data.status});
+        res.status(201).json({ message: 'Status Update', status: data.status});
     }
     catch (error) {
-        res.status(500).json({ message: 'Set status failed' , error});
+        res.status(200).json({ message: 'Set status failed' , error});
     }
 
 };
@@ -162,22 +163,25 @@ const editMe = async (req, res) => {
     try {
         const data = req.body;
 
-        data.password = undefined;
-        data.id = undefined;
-        data.email = undefined;
+        delete data.password;
+        delete data.id;
+        delete data.email;
+
+
+        console.log(data)
 
         const im = req.user;
         const newIm = await prisma.user.update({ where: { userId: im.userId }, data });
 
-        res.status(200).json({message: 'Set data successful', user: newIm})
+        res.status(201).json({message: 'Set data successful', user: newIm})
     }
     catch (error) {
-        res.status(500).json({ message: 'Set data failed', error});
+        res.status(200).json({ message: 'Set data failed', error});
     }
 };
 
 /**
- * @route PUT /profile/delete
+ * @route DELETE /profile/delete
  * @desc Delete me
  * @access Private
  */
@@ -190,7 +194,7 @@ const deleteMe = async (req, res) => {
         res.status(200).json({ message: 'User was deleted' })
     }
     catch (error) {
-        res.status(500).json({ message: 'Delete error', error });
+        res.status(200).json({ message: 'Delete error', error });
     }
 }
 

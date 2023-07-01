@@ -7,6 +7,12 @@
 ### документация.
 # Documentation.
 
+### **!!!Важно.**
+1. All requests actually have a status of 200. Due to the browser processing other statuses as errors.<br>
+Все запросы на самом деле имеют статус 200. Из-за обрабатывания браузером других статусов, как ошибки.
+
+2. CORS policy is established only for localhost:3000. <br>CORS политика налажена лишь для localhost:3000.
+***
 ### Example. Пример.
 
 >**/...** --- First lvl of the pathName. Первый уровень пути к файлу.
@@ -22,7 +28,7 @@
 >>>__Status ***__ --- Status server response. Cтатус ответ сервера. | object --- Server response. Ответ сервера
 >>*
 
-***
+
 ****
 
 ## /Profile
@@ -46,7 +52,7 @@
 - ### **POST | Public | ' /login '** --- Log in; Залогиница;
 - - **Request Data:** { email: *String*, password: *String* };
 - -
-- **Response:**
+- - **Response:**
 - - Status 500 | { message: 'Login fail', error };
 - - Status 400 | { message: 'Email or password uncorrect' };
 - - Good response | saved token in cookie;

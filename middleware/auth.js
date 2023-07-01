@@ -7,7 +7,7 @@ const auth = async (req, res, next) => {
         const token = req.headers.cookie?.split('=')[1];
 
         if (!token) {
-            res.status(401).json({ message: 'not authorized' });
+            return res.status(200).json({ message: 'not authorized' });
         }
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         // res.status(200).json(decoded)
@@ -21,7 +21,7 @@ const auth = async (req, res, next) => {
         next();
     }
     catch (err) {
-        res.status(401).json({ message: 'not authorized' })
+        res.status(200).json({ message: 'not authorized' })
     }
 }
 
