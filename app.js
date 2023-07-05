@@ -9,15 +9,16 @@ require('dotenv').config();
 
 const usersRouter = require('./routes/users');
 const profileRouter = require('./routes/profile');
+const postRouter = require('./routes/post')
 
 const app = express();
 
 const corsOptions ={
-    origin:'http://localhost:3000', 
+    origin:'http://localhost:3000',
     credentials:true,            //access-control-allow-credentials:true
     optionSuccessStatus:200
 }
- 
+
 
 app.use(logger('dev'));
 app.use(cors(corsOptions));
@@ -27,6 +28,7 @@ app.use(cookieParser());
 
 app.use('/users', usersRouter);
 app.use('/profile', profileRouter);
+app.use('/post', postRouter)
 
 
 module.exports = app;

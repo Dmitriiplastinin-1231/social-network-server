@@ -1,11 +1,9 @@
-const bcrypt = require('bcrypt');
 const { prisma } = require('../prisma/prisma-client');
-const jwt = require('jsonwebtoken');
 
 /**
  * @route GET users/
  * @desc Give all users
- * @access Publick
+ * @access Public
  */
 const users = async (req, res) => {
     try {

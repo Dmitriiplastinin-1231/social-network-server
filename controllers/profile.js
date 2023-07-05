@@ -28,6 +28,9 @@ const getUser = async (req, res) => {
         const user = await prisma.user.findFirst({
             where: {
                 userId: id
+            },
+            include: {
+                posts: {}
             }
         });
         if (!user) {
@@ -50,7 +53,6 @@ const getUser = async (req, res) => {
 const login = async (req, res) => {
     try {
         const { email, password } = req.body;
-        console.log(email, password)
         const user = await prisma.user.findFirst({
             where: {
                 email
@@ -82,7 +84,7 @@ const login = async (req, res) => {
 /**
  * @route POST profile/register
  * @desc Create user
- * @access Publick
+ * @access Public
  */
 const createUser = async (req, res) => {
     try {
@@ -128,7 +130,6 @@ const createUser = async (req, res) => {
         }
     }
     catch (error) {
-        console.log(error)
         return res.status(200).json({ message: 'Server error', error });
     }
 };
@@ -142,7 +143,6 @@ const newStatus = async (req, res) => {
     try {
         const data = req.body;
         const im = req.user;
-        console.log(data)
 
         await prisma.user.update({ where: {userId: im.userId}, data });
 
@@ -167,8 +167,6 @@ const editMe = async (req, res) => {
         delete data.id;
         delete data.email;
 
-
-        console.log(data)
 
         const im = req.user;
         const newIm = await prisma.user.update({ where: { userId: im.userId }, data });

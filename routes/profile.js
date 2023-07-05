@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
-const { Im, getUser, login, newStatus, editMe, deleteMe, createUser } = require('../controllers/profile');
-const { auth } = require('../middleware/auth');
+var { Im, getUser, login, newStatus, editMe, deleteMe, createUser } = require('../controllers/profile');
+var { auth } = require('../middleware/auth');
 
 // /profile/
 router.get('/', auth, Im);

@@ -8,8 +8,8 @@
 # Documentation.
 
 ### **!!!Важно.**
-1. All requests actually have a status of 200. Due to the browser processing other statuses as errors.<br>
-Все запросы на самом деле имеют статус 200. Из-за обрабатывания браузером других статусов, как ошибки.
+1. All respons actually have a status of 200. Due to the browser(or axios, i don't know) processing other statuses as errors.<br>
+Все ответы на самом деле имеют статус 200. Из-за обрабатывания браузером(или аксиусом, я не знаю) других статусов, как ошибки.
 
 2. CORS policy is established only for localhost:3000. <br>CORS политика налажена лишь для localhost:3000.
 ***
@@ -41,7 +41,7 @@
 - - Status 200 | { userData(me) };
 - -
 - ### **GET | Public | ' /:id '** --- Give info about person with specified :id; выдает ифнормацию о человеке с указанным :id;
-- - **Request Data:** none;
+- - **Request Data:** '/:userId';
 - -
 - - **Response:**
 - -
@@ -93,10 +93,61 @@
 - -
 ***
 ## /users
-- ### **GET| Public | ' / '** --- Give all users; Выдает все пользователей;
+- ### **GET | Public | ' / '** --- Give all users; Выдает все пользователей;
 - - **Request Data:** none;
 - -
 - - **Response:**
 - - Status 500 | { message: 'Server error', error };
 - - Status 200 | { user(without password, bgPhoto, email) };
+****
+## /post
+- ### **GET | Public | ' / '** --- Give all posts; Выдает все посты;
+- - **Request Data:** none;
+- -
+- - **Response:**
+- - Status 500 | { message:'Failed to get posts', error };
+- - Status 200 |
+    <br>{
+    <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; message: 'Getting posts successfully',
+    <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; posts: {
+    <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; title?: *String*,
+    <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; text: *String*,
+    <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; id: *String*,
+    <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; author: {userId: *String*, photo?: *String*, name: *String*, status?: *String*}
+    <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+    <br>};
+- -
+- ### **GET | Public | ' /:id '** --- Give all user posts; Выдает все посты пользователя;
+- - **Request Data:** /:userId;
+- -
+- - **Response:**
+- - Status 500 | { message:'Failed to get posts', error };
+- - Status 200 | { message: 'Getting posts successfully', posts };
+- -
+- ### **POST | Private | ' /create '** --- Creates post; Создает пост;
+- - **Request Data:** {title?: *String*, text: *String*};
+- -
+- - **Response:**
+- - Status 500 | { message: 'Failed to create posts', error };
+- - Status 400 | { message: 'Unable to create a post without text' };
+- - Status 201 | { message: 'Post was seccessfully created', post };
+- -
+- ### **PUT | Private | ' /edit '** --- Edits post; Изменяет пост;
+- - **Request Data:** { data: {title?: *String*, text: *String*}, id: *String* };
+- -
+- - **Response:**
+- - Status 500 | { message: 'Failed to edit post', error };
+- - Status 400 | { message: 'No data' };
+- - Status 400 | { message: 'Either post id uncorrect or user is not the owner' };
+- - Status 200 | { message: 'Post edited' };
+- -
+- ### **DELETE | Private | ' /delete '** --- Deletes post; Удаляет пост;
+- - **Request Data:** { id: *String* };
+- -
+- - **Response:**
+- - Status 500 | { message: 'Failed to delete post', error };
+- - Status 400 | { message: 'No postId' };
+- - Status 400 | { message: 'Either post id incorrect or user is not the owner' };
+- - Status 204 | { message: 'Post deleted'};
+- -
 ****
