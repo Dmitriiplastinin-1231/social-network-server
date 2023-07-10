@@ -144,7 +144,7 @@ const newStatus = async (req, res) => {
         const data = req.body;
         const im = req.user;
 
-        await prisma.user.update({ where: {userId: im.userId}, data });
+        await prisma.user.update({ where: { userId: im.userId }, data });
 
         res.status(201).json({ message: 'Status Update', status: data.status});
     }
@@ -169,7 +169,7 @@ const editMe = async (req, res) => {
 
 
         const im = req.user;
-        const newIm = await prisma.user.update({ where: { userId: im.userId }, data });
+        const newIm = await prisma.user.update({ where: { userId: im.userId }, data});
 
         res.status(201).json({message: 'Set data successful', user: newIm})
     }

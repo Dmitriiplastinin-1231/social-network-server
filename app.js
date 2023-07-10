@@ -9,7 +9,8 @@ require('dotenv').config();
 
 const usersRouter = require('./routes/users');
 const profileRouter = require('./routes/profile');
-const postRouter = require('./routes/post')
+const postRouter = require('./routes/post');
+const messageRouter = require('./routes/message.js');
 
 const app = express();
 
@@ -29,6 +30,7 @@ app.use(cookieParser());
 app.use('/users', usersRouter);
 app.use('/profile', profileRouter);
 app.use('/post', postRouter)
+app.use('/message', messageRouter)
 
 
 module.exports = app;

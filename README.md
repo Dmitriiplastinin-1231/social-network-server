@@ -31,7 +31,7 @@
 
 ****
 
-## /Profile
+## /profile
 - ### **GET | Private | ' / '**  --- Give info about me; Выдает информацию обо мне;
 - - **Request Data:** none;
 - -
@@ -81,7 +81,7 @@
 - - **Response:**
 - - Status 401 | { message: 'not authorized' };
 - - Status 500 | { message: 'Set data failed', error };
-- - Status 200 | { message: 'Set data successful', user };
+- - Status 200 | { message: 'Set data successful', user(without posts) };
 - -
 - ### **DELETE | Private | ' /delete '** --- Delete you account; Удалить свой аккаунт;
 - - **Request Data:** none;
@@ -149,5 +149,49 @@
 - - Status 400 | { message: 'No postId' };
 - - Status 400 | { message: 'Either post id incorrect or user is not the owner' };
 - - Status 204 | { message: 'Post deleted'};
+- -
+****
+
+## /message
+- ### **GET | Private | ' /:userId '** --- Give correspondence with one user; Выдает переписку с одним пользователем;
+- - **Request Data:** /:userId;
+- -
+- - **Response:**
+- - Status 500 | { message: 'Failed get message', error };
+- - Status 400 | { message: 'No user ID' }
+- - Status 200 | { message: 'Messages received', messages } ;
+- -
+### **GET | Private | ' /interlocutors '** --- Give interlocutors; Выдает собеседников;
+- - **Request Data:** none;
+- -
+- - **Response:**
+- - Status 500 | { message: 'Failed get interlocutors', error };
+- - Status 200 | { message: 'Interlocutors get seccussefuly', interlocutors } ;
+- -
+- ### **POST | Private | ' /send/:userid '** --- Sends message(creates); Отправляет сообщение(создает);
+- - **Request Data:** {text: *String*}, /:userId;
+- -
+- - **Response:**
+- - Status 500 | { message: 'Failed send message', error };
+- - Status 400 | { message: 'No user ID' }
+- - Status 201 | { message: 'Message seccessfully sended', sendedMessage };
+- -
+- ### **PUT | Private | ' /edit/:messageId '** --- Edits message; Изменяет сообщение;
+- - **Request Data:** {text: *String*}, /:messageId;
+- -
+- - **Response:**
+- - Status 500 | { message: 'Failed edit message', error };
+- - Status 400 | { message: 'No message ID or text' }
+- - Status 400 | { message: 'Either message id incorrect or you is not the owner' };
+- - Status 200 | { message: 'Message edited' };
+- -
+- ### **DELETE | Private | ' /:messageId '** --- Deletes message; Удаляет сообщение;
+- - **Request Data:** /:messageId;
+- -
+- - **Response:**
+- - Status 500 | { message: 'Failed delete message', error };
+- - Status 400 | { message: 'No message ID' }
+- - Status 400 | { message: 'Either message id incorrect or you is not the owner' };
+- - Status 200 | { message: 'Deleted seccessfully' };
 - -
 ****

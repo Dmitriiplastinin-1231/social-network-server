@@ -11,24 +11,33 @@ datasource db {
 }
 
 model User {
-  userId   String @id @default(uuid())
-  name     String
-  password String
-  age      Int?
-  photo    String?
-  bgPhoto  String?
-  status   String?
-  sex      String?
-  email    String @unique
-  vk       String?
-  github   String?
-  posts    Post[]
+  userId      String @id @default(uuid())
+  name        String
+  password    String
+  age         Int?
+  photo       String?
+  bgPhoto     String?
+  status      String?
+  sex         String?
+  email       String @unique
+  vk          String?
+  github      String?
+  posts       Post[]
+  messages    Message[]
 }
 
 model Post {
-  id        String @id @default(uuid())
-  author    User @relation(fields: [authorId], references: [userId])
-  authorId  String
-  title     String
-  text      String
+  id          String @id @default(uuid())
+  author      User @relation(fields: [authorId], references: [userId])
+  authorId    String
+  title       String
+  text        String
+}
+
+model Message {
+  id          String @id @default(uuid())
+  sender      User @relation(fields: [senderId], references: [userId])
+  senderId    String
+  addresseeId String
+  text        String
 }
