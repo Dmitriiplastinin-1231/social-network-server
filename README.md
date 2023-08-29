@@ -8,8 +8,8 @@
 # Documentation.
 
 ### **!!!Важно.**
-1. All respons actually have a status of 200. Due to the browser(or axios, i don't know) processing other statuses as errors.<br>
-Все ответы на самом деле имеют статус 200. Из-за обрабатывания браузером(или аксиусом, я не знаю) других статусов, как ошибки.
+1. All respons actually have a status of 200. Due to possible problems when processing other statuses.<br>
+Все ответы на самом деле имеют статус 200. Из-за возможных проблем при обработке других статусов.
 
 2. CORS policy is established only for localhost:3000. <br>CORS политика налажена лишь для localhost:3000.
 ***
@@ -149,6 +149,15 @@
 - - Status 400 | { message: 'No postId' };
 - - Status 400 | { message: 'Either post id incorrect or user is not the owner' };
 - - Status 204 | { message: 'Post deleted'};
+- -
+- ### **PUT | Private | ' /photo '** --- Save profile photo; Сохраняет фото профиля;
+- - **Request Data:** new FormData().append('profilePhoto', photo), headers: {'Content-Type': 'multipart/form-data';}
+- -
+- - **Response:**
+- - Status 500 | { message: 'Fail save photo', error };
+- - Status 500 | { message: 'User folder not found', error };
+- - Status 400 | { message: 'File is incorrect' };
+- - Status 201 | { message: 'Photo update successful', user: newIm };
 - -
 ****
 

@@ -14,6 +14,18 @@ const messageRouter = require('./routes/message.js');
 
 const app = express();
 
+// const storageConfig = multer.diskStorage({
+//     destination: (req, file, cb) =>{
+//         cb(null, "uploads");
+//     },
+//     filename: (req, file, cb) =>{
+//         cb(null, file.originalname);
+//     }
+// });
+
+
+
+
 const corsOptions ={
     origin:'http://localhost:3000',
     credentials:true,            //access-control-allow-credentials:true
@@ -21,8 +33,11 @@ const corsOptions ={
 }
 
 
+// app.use(express.static(__dirname));
+// app.use(multer({storage:storageConfig}).single("filedata"));
 app.use(logger('dev'));
 app.use(cors(corsOptions));
+app.use('/upload', express.static(path.join(__dirname, 'upload')))
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());

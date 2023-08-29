@@ -3,7 +3,6 @@ const { prisma } = require('../prisma/prisma-client');
 
 const auth = async (req, res, next) => {
     try {
-
         const token = req.headers.cookie?.split('=')[1];
 
         if (!token) {
@@ -16,8 +15,8 @@ const auth = async (req, res, next) => {
                 userId: decoded.id
             }
         });
-        req.user = user;
 
+        req.user = user;
         next();
     }
     catch (err) {

@@ -1,6 +1,8 @@
 const { prisma } = require("../prisma/prisma-client");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const fs = require("fs");
+
 
 /**
  * @route GET /profile/
@@ -116,6 +118,13 @@ const createUser = async (req, res) => {
         const secret = process.env.JWT_SECRET;
 
         if (user && secret) {
+            fs.mkdir(`./upload/${user.userId}`, function(err) {
+                if (err) {
+                  console.log(err)
+                } else {
+                  console.log("New directory successfully created.")
+                }
+            })
             // res.status(201).json({
             //     id: user.userId,
             //     email: user.email,
@@ -194,7 +203,65 @@ const deleteMe = async (req, res) => {
     catch (error) {
         res.status(200).json({ message: 'Delete error', error });
     }
-}
+};
+
+/**
+ * @route PUT /profile/photo
+ * @desc Save profile photo
+ * @access Private
+*/
+const saveProfilePhoto = async (req, res) => {
+    try {
+        console.log(req.file)
+
+        const im = req.user;
+        const file = req.file;
+
+        if (!file) {
+            return res.status(200).json({ message: 'File is incorrect' })
+        }
+
+        const newIm = await prisma.user.update({ where: { userId: im.userId }, data: { photo: file.path } });
+
+        res.status(201).json({ message: 'Photo update successful', user: newIm });
+        // // let filedata = req.file;
+        // // console.log(typeof(filedata.buffer))
+
+        // fs.writeFile("filename.txt", filedata.buffer.split('Buffer ').join(''), function(err){
+        //     if (err) {
+        //         console.log(err);
+        //     } else {
+        //         console.log("Файл создан");
+        //     }
+        // });
+
+        // if (!filedata) {
+        //     return res.status(200).json({message: 'File uncorect'})
+        // }
+
+        // if (fs.existsSync('./upload/' + im.userId)) {
+        //     // console.log(req);
+        //     console.log(filedata)
+        //     fs.appendFile(`./upload/${im.userId}/profilePhoto.jpg`, req.body.photoData,(err) => {
+        //         if (err) throw err;
+        //             console.log('The "data to append" was appended to file!');
+        //         }
+        //     );
+        // }
+        // else {
+        //     fs.mkdir(`./upload/${im.userId}`, function (err) {
+        //         if (err) {
+        //             console.log(err);
+        //         } else {
+        //             console.log("New directory successfully created.");
+        //         }
+        //     });
+        // }
+    }
+    catch (error) {
+        res.status(200).json({ message: 'Fail save photo', error })
+    }
+};
 
 module.exports = {
     Im,
@@ -203,5 +270,6 @@ module.exports = {
     login,
     newStatus,
     editMe,
-    deleteMe
+    deleteMe,
+    saveProfilePhoto
 }
