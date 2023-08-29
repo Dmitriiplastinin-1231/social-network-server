@@ -91,6 +91,15 @@
 - - Status 500 | { message: 'Delete error', error };
 - - Status 200 | { message: 'User was deleted' };
 - -
+- ### **PUT | Private | ' /photo '** --- Save profile photo; Сохраняет фото профиля;
+- - **Request Data:** new FormData().append('profilePhoto', photo), headers: {'Content-Type': 'multipart/form-data';}
+- -
+- - **Response:**
+- - Status 500 | { message: 'Fail save photo', error };
+- - Status 500 | { message: 'User folder not found', error };
+- - Status 400 | { message: 'File is incorrect' };
+- - Status 201 | { message: 'Photo update successful', user: newIm };
+- -
 ***
 ## /users
 - ### **GET | Public | ' / '** --- Give all users; Выдает все пользователей;
@@ -149,15 +158,6 @@
 - - Status 400 | { message: 'No postId' };
 - - Status 400 | { message: 'Either post id incorrect or user is not the owner' };
 - - Status 204 | { message: 'Post deleted'};
-- -
-- ### **PUT | Private | ' /photo '** --- Save profile photo; Сохраняет фото профиля;
-- - **Request Data:** new FormData().append('profilePhoto', photo), headers: {'Content-Type': 'multipart/form-data';}
-- -
-- - **Response:**
-- - Status 500 | { message: 'Fail save photo', error };
-- - Status 500 | { message: 'User folder not found', error };
-- - Status 400 | { message: 'File is incorrect' };
-- - Status 201 | { message: 'Photo update successful', user: newIm };
 - -
 ****
 
