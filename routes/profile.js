@@ -1,9 +1,10 @@
 var express = require('express');
 var router = express.Router();
-var { Im, getUser, login, newStatus, editMe, deleteMe, createUser, saveProfilePhoto } = require('../controllers/profile');
+var { Im, getUser, login, newStatus, editMe, deleteMe, createUser, saveProfilePhoto, saveBg } = require('../controllers/profile');
 var { auth } = require('../middleware/auth');
 var fileMiddleware = require('../middleware/photoSave');
 var isUserDirExist = require('../middleware/isUserDirExist');
+const fileNameCreater = require('../middleware/fileNameCreater');
 
 // /profile/
 router.get('/', auth, Im);
@@ -14,7 +15,12 @@ router.get('/:id', getUser);
 // /profile/status
 router.put('/status', auth, newStatus);
 // /profile/edit
-router.put('/edit', auth, editMe);
+router.put('/edit', auth,
+    isUserDirExist,
+    fileNameCreater('bgPhoto'),
+    fileMiddleware.single('bg'),
+    editMe
+);
 // /profile/delete
 router.delete('/delete', auth, deleteMe);
 // /profile/register
@@ -23,12 +29,17 @@ router.post('/register', createUser);
 router.put('/photo',
     auth,
     isUserDirExist,
-    (req, res, next) => {
-        req.fileName = 'profilePhoto' + Math.floor(Math.random()*1000000);
-        next();
-    },
+    fileNameCreater('profilePhoto'),
     fileMiddleware.single('profilePhoto'),
     saveProfilePhoto
 );
+// /profile/bgPhoto
+router.put('/bgPhoto',
+    auth,
+    isUserDirExist,
+    fileNameCreater('bgPhoto'),
+    fileMiddleware.single('bg'),
+    saveBg
+)
 
 module.exports = router;

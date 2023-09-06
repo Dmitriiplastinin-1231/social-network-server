@@ -170,7 +170,13 @@ const newStatus = async (req, res) => {
  */
 const editMe = async (req, res) => {
     try {
-        const data = req.body;
+        const data = {...req.body};
+        if (req.file) {
+            data.bgPhoto = req.file.path;
+        }
+        if (data.age) {
+            data.age = +data.age;
+        }
 
         delete data.password;
         delete data.id;
@@ -224,44 +230,35 @@ const saveProfilePhoto = async (req, res) => {
         const newIm = await prisma.user.update({ where: { userId: im.userId }, data: { photo: file.path } });
 
         res.status(201).json({ message: 'Photo update successful', user: newIm });
-        // // let filedata = req.file;
-        // // console.log(typeof(filedata.buffer))
-
-        // fs.writeFile("filename.txt", filedata.buffer.split('Buffer ').join(''), function(err){
-        //     if (err) {
-        //         console.log(err);
-        //     } else {
-        //         console.log("Файл создан");
-        //     }
-        // });
-
-        // if (!filedata) {
-        //     return res.status(200).json({message: 'File uncorect'})
-        // }
-
-        // if (fs.existsSync('./upload/' + im.userId)) {
-        //     // console.log(req);
-        //     console.log(filedata)
-        //     fs.appendFile(`./upload/${im.userId}/profilePhoto.jpg`, req.body.photoData,(err) => {
-        //         if (err) throw err;
-        //             console.log('The "data to append" was appended to file!');
-        //         }
-        //     );
-        // }
-        // else {
-        //     fs.mkdir(`./upload/${im.userId}`, function (err) {
-        //         if (err) {
-        //             console.log(err);
-        //         } else {
-        //             console.log("New directory successfully created.");
-        //         }
-        //     });
-        // }
     }
     catch (error) {
         res.status(200).json({ message: 'Fail save photo', error })
     }
 };
+
+/**
+ * @route PUT /profile/bgPhoto
+ * @desc Save profile bg
+ * @access Private
+ */
+const saveBg = async (req, res) => {
+    try {
+
+        const im = req.user;
+        const file = req.file;
+
+        if (!file) {
+            return res.status(200).json({ message: 'File is incorrect' })
+        }
+
+        const newIm = await prisma.user.update({ where: { userId: im.userId }, data: { bgPhoto: file.path } });
+
+        res.status(201).json({ message: 'Bg update successful', user: newIm });
+    }
+    catch (error){
+        res.status(200).json({ message: 'Fail save bg', error })
+    }
+}
 
 module.exports = {
     Im,
@@ -271,5 +268,6 @@ module.exports = {
     newStatus,
     editMe,
     deleteMe,
-    saveProfilePhoto
+    saveProfilePhoto,
+    saveBg
 }

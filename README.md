@@ -77,10 +77,13 @@
 - -
 - ### **POST | Private | ' /edit '** --- Set various data about yourself; Установить различные данные о себе;
 - - **Request Data:** {age?: *Int*, status?: *String*, Sex?: *'man' | 'woman'*, vk?: *String*, github?: *String*};
+- - **OR**
+- - **Request Data:** new FormData().append('bg', photo).append('age', ...).append(...);
 - -
 - - **Response:**
 - - Status 401 | { message: 'not authorized' };
 - - Status 500 | { message: 'Set data failed', error };
+- - Status 500 | { message: 'User folder not found', error };
 - - Status 200 | { message: 'Set data successful', user(without posts) };
 - -
 - ### **DELETE | Private | ' /delete '** --- Delete you account; Удалить свой аккаунт;
@@ -99,6 +102,15 @@
 - - Status 500 | { message: 'User folder not found', error };
 - - Status 400 | { message: 'File is incorrect' };
 - - Status 201 | { message: 'Photo update successful', user: newIm };
+- -
+- ### **PUT | Private | ' /bgPhoto '** --- Save profile bg; Сохраняет фото профиля;
+- - **Request Data:** new FormData().append('bg', photo), headers: {'Content-Type': 'multipart/form-data';}
+- -
+- - **Response:**
+- - Status 500 | { message: 'Fail save photo', error };
+- - Status 500 | { message: 'User folder not found', error };
+- - Status 400 | { message: 'File is incorrect' };
+- - Status 201 | { message: 'Bg update successful', user: newIm };
 - -
 ***
 ## /users

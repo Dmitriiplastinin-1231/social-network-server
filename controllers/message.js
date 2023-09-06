@@ -154,7 +154,6 @@ const editMessage = async (req, res) => {
         const { text } = req.body;
         const Im = req.user;
 
-        console.log(Im.userId)
 
         if (!messageId || !text) {
             return res.status(200).json({ message: 'No message ID or text' });

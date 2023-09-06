@@ -127,7 +127,7 @@ const deletePost = async (req, res) => {
     try {
         const id = req.body.id;
         const authorId = req.user.userId;
-        console.log(req.body)
+
         if (!id) {
             //400
             return res.status(200).json({ message: 'No postId' });

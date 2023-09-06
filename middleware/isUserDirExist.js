@@ -8,7 +8,7 @@ const fs = require("fs");
  */
 const isUserDirExist = async (req, res, next) => {
     const dirPath = './upload/' + req.user.userId;
-    console.log(1)
+
     if (fs.existsSync(dirPath)) {
         req.dirPath = dirPath;
         next();
